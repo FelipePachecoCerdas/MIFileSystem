@@ -5,6 +5,7 @@
  */
 package archivador;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -30,5 +31,11 @@ public class Registro implements Cloneable{
     public Object clone()throws CloneNotSupportedException{  
         return super.clone();  
     }  
+    
+    public void match(String buscar, ArrayList<Registro> encontrados){
+        if(this.nombre.contains(buscar)){
+            encontrados.add(this);
+        }
+    }
     
 }

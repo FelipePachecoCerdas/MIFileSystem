@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -74,6 +75,7 @@ public class Gui extends javax.swing.JFrame {
         BCopyVR = new javax.swing.JButton();
         BLectura = new javax.swing.JButton();
         BModificar = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -171,7 +173,15 @@ public class Gui extends javax.swing.JFrame {
                 BModificarActionPerformed(evt);
             }
         });
-        getContentPane().add(BModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 270, 80, 30));
+        getContentPane().add(BModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 300, 80, 30));
+
+        jButton6.setText("Buscar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 250, -1, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -334,6 +344,20 @@ public class Gui extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BModificarActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            String name = reader.readLine();
+            ArrayList<Registro> encontrados = coso.buscar(name);
+            for(Registro r : encontrados){
+                System.out.println(r.nombre);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -383,6 +407,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> lista;

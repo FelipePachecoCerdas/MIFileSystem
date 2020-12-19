@@ -44,4 +44,14 @@ public class Folder extends Registro {
         }
     }
     
+    @Override
+    public void match(String buscar, ArrayList<Registro> encontrados){
+        if(this.nombre.contains(buscar)){
+            encontrados.add(this);
+        }
+        for(Registro r : this.listaCosos){
+            r.match(buscar, encontrados);
+        }
+    }
+    
 }

@@ -5,11 +5,11 @@
  */
 package archivador;
 
-import com.sun.tools.javac.util.StringUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 /**
@@ -219,4 +219,11 @@ public class FileSystem {
             sector=siguienteSector;
         }
     }
+    
+    public ArrayList<Registro> buscar(String buscar){
+        ArrayList<Registro> encontrados = new ArrayList<Registro>();
+        Actual.match(buscar, encontrados);
+        return encontrados;
+    }
+    
 }
