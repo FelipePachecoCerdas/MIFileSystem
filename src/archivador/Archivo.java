@@ -14,6 +14,7 @@ import java.util.Date;
 public class Archivo extends Registro {
     public int Tamano;
     public String Contenido;
+    public int sectorInicial;
     
     public Archivo(String pNombre, Folder pPadre, int pTamano, String pContenido){
         this.path = pPadre.path + pNombre + "/";
@@ -22,6 +23,7 @@ public class Archivo extends Registro {
         this.FechaCreacion = new Date();
         this.Contenido = pContenido;
         this.padre = pPadre;
+        this.sectorInicial = -1;
     }
     
     

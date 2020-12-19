@@ -5,10 +5,12 @@
  */
 package GUI;
 
+import archivador.Archivo;
 import archivador.FileSystem;
 import archivador.Folder;
 import archivador.Registro;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
@@ -70,6 +72,8 @@ public class Gui extends javax.swing.JFrame {
         BCopyVV = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         BCopyVR = new javax.swing.JButton();
+        BLectura = new javax.swing.JButton();
+        BModificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -148,10 +152,26 @@ public class Gui extends javax.swing.JFrame {
         getContentPane().add(BCopyVV, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 300, 80, 30));
 
         jButton8.setText("Importar");
-        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 300, 80, 30));
+        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 300, 80, 30));
 
         BCopyVR.setText("Exportar");
         getContentPane().add(BCopyVR, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 300, 80, 30));
+
+        BLectura.setText("Leer");
+        BLectura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BLecturaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(BLectura, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 250, 80, 30));
+
+        BModificar.setText("Modificar");
+        BModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BModificarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(BModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 270, 80, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -192,6 +212,7 @@ public class Gui extends javax.swing.JFrame {
         int a = lista.getSelectedIndex();
         if(a != -1 && a <= coso.Actual.listaCosos.size()){
             Registro elim = coso.Actual.listaCosos.get(a);
+            System.out.println(((Archivo) elim).sectorInicial);
             coso.ReMove(elim);
             actualizarCosos();
         }
@@ -201,8 +222,12 @@ public class Gui extends javax.swing.JFrame {
         // TODO add your handling code here:
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
+            System.out.println("Indique el nombre del archivo:");
             String name = reader.readLine();
-            coso.createFile(name, 10, "Hola Mundo");
+            System.out.println("Indique el contenido del archivo:");
+            String contenido = reader.readLine();
+            int tamannoArchivo=contenido.length();
+            coso.createFile(name, tamannoArchivo, contenido);
             actualizarCosos();
         } catch (IOException ex) {
             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
@@ -251,7 +276,6 @@ public class Gui extends javax.swing.JFrame {
             ButtonMover.setText("Seleccionar");
         }
         actualizarCosos();
-        
     }//GEN-LAST:event_BMoverActionPerformed
 
     private void BCopyVVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BCopyVVActionPerformed
@@ -282,10 +306,38 @@ public class Gui extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_BCopyVVActionPerformed
 
+    private void BLecturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BLecturaActionPerformed
+        // TODO add your handling code here:
+        int a = lista.getSelectedIndex();
+        if(a != -1 && a <= coso.Actual.listaCosos.size()){
+            Registro leer = coso.Actual.listaCosos.get(a);
+            try {
+                coso.verFile((Archivo) leer);
+            } catch (IOException ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_BLecturaActionPerformed
+
+    private void BModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BModificarActionPerformed
+        int a = lista.getSelectedIndex();
+        if(a != -1 && a <= coso.Actual.listaCosos.size()){
+            Registro archivo = coso.Actual.listaCosos.get(a);
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                System.out.println("Indique el nuevo texto del archivo:");
+                String contenido = reader.readLine();
+                coso.modFILE((Archivo) archivo, contenido);
+            } catch (IOException ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_BModificarActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws FileNotFoundException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -321,6 +373,8 @@ public class Gui extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BCopyVR;
     private javax.swing.JButton BCopyVV;
+    private javax.swing.JButton BLectura;
+    private javax.swing.JButton BModificar;
     private javax.swing.JButton BMover;
     private javax.swing.JButton ButtonMover;
     private javax.swing.JLabel LabelPath;
