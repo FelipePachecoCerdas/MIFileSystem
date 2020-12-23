@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -33,7 +34,40 @@ public class FileSystem {
   public int tamanoSector;
 
   //Vendria siendo la función CREATE
-  public FileSystem(int pCantSectores, int pTamanoSector) throws FileNotFoundException {
+  public FileSystem(/*int pCantSectores, int pTamanoSector*/) throws FileNotFoundException {
+
+    int pCantSectores = -1;
+    int pTamanoSector = -1;
+
+    while (pCantSectores == -1) {
+      String cant = JOptionPane.showInputDialog(null, "Indique la cantidad de sectores del disco virtual", "Parámetros Iniciales", JOptionPane.QUESTION_MESSAGE);
+
+      if (cant == null || cant.equals("")) {
+        System.exit(0);
+      }
+
+      try {
+        pCantSectores = new Integer(cant);
+      } catch (Exception e) {
+        continue;
+      }
+
+    }
+
+    while (pTamanoSector == -1) {
+      String cant = JOptionPane.showInputDialog(null, "Indique tamaño (en bytes) de cada sector del disco virtual", "Parámetros Iniciales", JOptionPane.QUESTION_MESSAGE);
+
+      if (cant == null || cant.equals("")) {
+        System.exit(0);
+      }
+
+      try {
+        pTamanoSector = new Integer(cant);
+      } catch (Exception e) {
+        continue;
+      }
+
+    }
     //Hace algo con eso de la memoria
     File file = new File("discoVirtual.txt");
     file.delete();
@@ -46,6 +80,12 @@ public class FileSystem {
     Folder c = new Folder("C:", null);//Crea el folder inicial
     this.root = c;
     this.Actual = c;
+
+    try {
+      this.discoVirtual.setLength(pCantSectores * pTamanoSector);
+    } catch (IOException ex) {
+      Logger.getLogger(FileSystem.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
 
   //Vendria siendo la función FILE

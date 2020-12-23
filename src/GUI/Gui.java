@@ -505,25 +505,25 @@ public class Gui extends javax.swing.JFrame {
     jLabel2.setBackground(Color.decode("#4ecca3"));
     jLabel2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
     jLabel2.setForeground(Color.decode("#29c7ac"));
-    getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 620, 50, 50));
+    getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 620, 20, 50));
 
     jLabel3.setBackground(Color.decode("#ff8e71"));
     jLabel3.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
     jLabel3.setForeground(Color.decode("#ff8e71"));
     jLabel3.setText("MI File System");
-    getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, -1, -1));
+    getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, -1, -1));
 
     LabelPath.setBackground(new java.awt.Color(255, 255, 255));
     LabelPath.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
     LabelPath.setForeground(new java.awt.Color(255, 255, 255));
-    getContentPane().add(LabelPath, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 30, 40, 40));
+    getContentPane().add(LabelPath, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 30, 40, 40));
 
     clipboard.setBackground(Color.decode("#373a40"));
     clipboard.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
     clipboard.setForeground(new java.awt.Color(255, 255, 255));
     clipboard.setText("path");
     clipboard.setOpaque(true);
-    getContentPane().add(clipboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 590, 400, 40));
+    getContentPane().add(clipboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 590, 340, 40));
 
     jButton9.setBackground(Color.decode("#373a40"));
     jButton9.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
@@ -546,12 +546,12 @@ public class Gui extends javax.swing.JFrame {
     LabelPath1.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
     LabelPath1.setForeground(new java.awt.Color(255, 255, 255));
     LabelPath1.setText("Portapapeles:");
-    getContentPane().add(LabelPath1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 590, 110, 40));
+    getContentPane().add(LabelPath1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 590, 110, 40));
 
     LabelPath2.setBackground(new java.awt.Color(255, 255, 255));
     LabelPath2.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
     LabelPath2.setForeground(new java.awt.Color(255, 255, 255));
-    getContentPane().add(LabelPath2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 30, 40, 40));
+    getContentPane().add(LabelPath2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, 40, 40));
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
@@ -941,6 +941,8 @@ public class Gui extends javax.swing.JFrame {
       encontrados = coso.buscar(name);
 
       JList superLista = new JList();
+      superLista.setBackground(Color.decode("#433d3c"));
+      superLista.setForeground(Color.decode("#FFFFFF"));
       superLista.setCellRenderer(new ListCellRenderer());
       superLista.setSize(superLista.getPreferredSize().width, superLista.getPreferredSize().height);
 
@@ -1141,11 +1143,11 @@ public class Gui extends javax.swing.JFrame {
     }
     //</editor-fold>
 
-    FileSystem este = new FileSystem(3, 5);
+    //FileSystem este = new FileSystem(3, 5);
     /* Create and display the form */
     java.awt.EventQueue.invokeLater(new Runnable() {
       public void run() {
-        new Gui(este).setVisible(true);
+        //new Gui(este).setVisible(true);
       }
     });
   }
