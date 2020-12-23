@@ -11,6 +11,7 @@ import archivador.Folder;
 import archivador.Registro;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -26,6 +27,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -67,6 +69,49 @@ public class Gui extends javax.swing.JFrame {
     jButton5.setEnabled(false);
     BCopyVV.setEnabled(false);
     BMover.setEnabled(false);
+
+    final int TAM = 25;
+    ImageIcon img = new ImageIcon(new ImageIcon("src/Imagenes/copiar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.BCopyVV.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/nuevoDirectorio.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.jButton3.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/nuevoArchivo.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.jButton4.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/mover.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.BMover.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/importar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.jButton9.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/exportar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.BCopyVR.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/propiedades.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.BModificar.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/borrar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.jButton5.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/buscar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.jButton6.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/deseleecionar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.jButton2.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/limpiar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.limpiar.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/atras.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    this.jButton1.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/hierarchy.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+    this.LabelPath2.setIcon(img);
+
+    img = new ImageIcon(new ImageIcon("src/Imagenes/line-bars.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+    this.LabelPath.setIcon(img);
 
     this.setLocationRelativeTo(null);
     this.getContentPane().setBackground(Color.decode("#121212"));
@@ -242,6 +287,12 @@ public class Gui extends javax.swing.JFrame {
       log.expandRow(i);
     }
 
+    if (coso.Actual.padre == null) {
+      jButton1.setEnabled(false);
+    } else {
+      jButton1.setEnabled(true);
+    }
+
   }
 
   public DefaultMutableTreeNode popularArbol(Registro r) {
@@ -249,7 +300,7 @@ public class Gui extends javax.swing.JFrame {
 
     if (r instanceof Folder) {
       Folder f = (Folder) r;
-      yo = new DefaultMutableTreeNode("D" + f.nombre + ((f == coso.Actual) ? "  [←]" : ""));
+      yo = new DefaultMutableTreeNode("D" + f.nombre + ((f == coso.Actual) ? "$" : ""));
       arbolados.add(r);
 
       for (Registro elem : f.listaCosos) {
@@ -295,6 +346,8 @@ public class Gui extends javax.swing.JFrame {
     jButton9 = new javax.swing.JButton();
     jScrollPane2 = new javax.swing.JScrollPane();
     log = new javax.swing.JTree();
+    LabelPath1 = new javax.swing.JLabel();
+    LabelPath2 = new javax.swing.JLabel();
 
     ButtonAnalize1.setBackground(Color.decode("#4ecca3"));
     ButtonAnalize1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
@@ -308,21 +361,25 @@ public class Gui extends javax.swing.JFrame {
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-    LabelPathW.setBackground(new java.awt.Color(255, 255, 255));
+    LabelPathW.setBackground(Color.decode("#373a40"));
     LabelPathW.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
     LabelPathW.setForeground(new java.awt.Color(255, 255, 255));
     LabelPathW.setText("Portapapeles:");
-    getContentPane().add(LabelPathW, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 540, 30));
+    LabelPathW.setOpaque(true);
+    getContentPane().add(LabelPathW, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 100, 520, 40));
 
-    jButton1.setBackground(Color.decode("#4ecca3"));
+    jButton1.setBackground(Color.decode("#373a40"));
+    jButton1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+    jButton1.setForeground(new java.awt.Color(255, 255, 255));
     jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/return.png"))); // NOI18N
+    jButton1.setText("Atrás");
     jButton1.setToolTipText("");
     jButton1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton1ActionPerformed(evt);
       }
     });
-    getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, 50, 30));
+    getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 100, 160, 40));
 
     lista.setBackground(Color.decode("#433d3c"));
     lista.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -331,147 +388,170 @@ public class Gui extends javax.swing.JFrame {
 
     getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 700, 230));
 
-    jButton2.setBackground(Color.decode("#4ecca3"));
+    jButton2.setBackground(Color.decode("#373a40"));
+    jButton2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+    jButton2.setForeground(new java.awt.Color(255, 255, 255));
     jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/next.png"))); // NOI18N
+    jButton2.setText("Deseleccionar");
     jButton2.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton2ActionPerformed(evt);
       }
     });
-    getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 480, 30, 30));
+    getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 530, 160, 40));
 
-    jButton3.setBackground(Color.decode("#c4fb6d"));
+    jButton3.setBackground(Color.decode("#373a40"));
+    jButton3.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+    jButton3.setForeground(new java.awt.Color(255, 255, 255));
     jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/newDir.png"))); // NOI18N
+    jButton3.setText("Nuevo Directorio");
     jButton3.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton3ActionPerformed(evt);
       }
     });
-    getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, 50, 40));
+    getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, 160, 40));
 
-    jButton4.setBackground(Color.decode("#c4fb6d"));
+    jButton4.setBackground(Color.decode("#373a40"));
+    jButton4.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+    jButton4.setForeground(new java.awt.Color(255, 255, 255));
     jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/newFile.png"))); // NOI18N
+    jButton4.setText("Nuevo Archivo");
     jButton4.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton4ActionPerformed(evt);
       }
     });
-    getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 410, 50, 40));
+    getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 470, 160, 40));
 
-    jButton5.setBackground(Color.decode("#d54062"));
+    jButton5.setBackground(Color.decode("#373a40"));
+    jButton5.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+    jButton5.setForeground(new java.awt.Color(255, 255, 255));
     jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/borrador.png"))); // NOI18N
+    jButton5.setText("Borrar");
     jButton5.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton5ActionPerformed(evt);
       }
     });
-    getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 410, 50, 40));
+    getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 530, 160, 40));
 
-    BMover.setBackground(Color.decode("#4ecca3"));
+    BMover.setBackground(Color.decode("#373a40"));
     BMover.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-    BMover.setForeground(new java.awt.Color(0, 0, 0));
+    BMover.setForeground(new java.awt.Color(255, 255, 255));
     BMover.setText("Mover");
     BMover.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         BMoverActionPerformed(evt);
       }
     });
-    getContentPane().add(BMover, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 470, 110, 40));
+    getContentPane().add(BMover, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 470, 160, 40));
 
-    BCopyVV.setBackground(Color.decode("#4ecca3"));
+    BCopyVV.setBackground(Color.decode("#373a40"));
     BCopyVV.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-    BCopyVV.setForeground(new java.awt.Color(0, 0, 0));
+    BCopyVV.setForeground(new java.awt.Color(255, 255, 255));
     BCopyVV.setText("Copiar");
     BCopyVV.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         BCopyVVActionPerformed(evt);
       }
     });
-    getContentPane().add(BCopyVV, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, 110, 40));
+    getContentPane().add(BCopyVV, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 410, 160, 40));
 
-    limpiar.setBackground(Color.decode("#4ecca3"));
+    limpiar.setBackground(Color.decode("#373a40"));
     limpiar.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-    limpiar.setForeground(new java.awt.Color(0, 0, 0));
+    limpiar.setForeground(new java.awt.Color(255, 255, 255));
     limpiar.setText("Limpiar");
     limpiar.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         limpiarActionPerformed(evt);
       }
     });
-    getContentPane().add(limpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 560, 80, -1));
+    getContentPane().add(limpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 590, 160, 40));
 
-    BCopyVR.setBackground(Color.decode("#4ecca3"));
+    BCopyVR.setBackground(Color.decode("#373a40"));
     BCopyVR.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-    BCopyVR.setForeground(new java.awt.Color(0, 0, 0));
+    BCopyVR.setForeground(new java.awt.Color(255, 255, 255));
     BCopyVR.setText("Exportar");
     BCopyVR.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         BCopyVRActionPerformed(evt);
       }
     });
-    getContentPane().add(BCopyVR, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 470, 110, 40));
+    getContentPane().add(BCopyVR, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 470, 160, 40));
 
-    BModificar.setBackground(Color.decode("#4ecca3"));
+    BModificar.setBackground(Color.decode("#373a40"));
     BModificar.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-    BModificar.setForeground(new java.awt.Color(0, 0, 0));
+    BModificar.setForeground(new java.awt.Color(255, 255, 255));
     BModificar.setText("Propiedades");
     BModificar.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         BModificarActionPerformed(evt);
       }
     });
-    getContentPane().add(BModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 410, 110, 40));
+    getContentPane().add(BModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 410, 160, 40));
 
-    jButton6.setBackground(Color.decode("#4ecca3"));
+    jButton6.setBackground(Color.decode("#373a40"));
     jButton6.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-    jButton6.setForeground(new java.awt.Color(0, 0, 0));
+    jButton6.setForeground(new java.awt.Color(255, 255, 255));
     jButton6.setText("Buscar");
     jButton6.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton6ActionPerformed(evt);
       }
     });
-    getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 470, 110, 40));
+    getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 470, 160, 40));
 
     jLabel2.setBackground(Color.decode("#4ecca3"));
     jLabel2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
     jLabel2.setForeground(Color.decode("#29c7ac"));
-    getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 560, 50, 50));
+    getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 620, 50, 50));
 
-    jLabel3.setBackground(new java.awt.Color(255, 255, 255));
-    jLabel3.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-    jLabel3.setForeground(Color.decode("#29c7ac"));
+    jLabel3.setBackground(Color.decode("#ff8e71"));
+    jLabel3.setFont(new java.awt.Font("Dialog", 1, 48)); // NOI18N
+    jLabel3.setForeground(Color.decode("#ff8e71"));
     jLabel3.setText("MI File System");
-    getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, -1, -1));
+    getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, -1, -1));
 
     LabelPath.setBackground(new java.awt.Color(255, 255, 255));
     LabelPath.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
     LabelPath.setForeground(new java.awt.Color(255, 255, 255));
-    LabelPath.setText("Portapapeles:");
-    getContentPane().add(LabelPath, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 530, 110, 30));
+    getContentPane().add(LabelPath, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 30, 40, 40));
 
-    clipboard.setBackground(new java.awt.Color(255, 255, 255));
+    clipboard.setBackground(Color.decode("#373a40"));
     clipboard.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
     clipboard.setForeground(new java.awt.Color(255, 255, 255));
     clipboard.setText("path");
-    getContentPane().add(clipboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 530, 570, 30));
+    clipboard.setOpaque(true);
+    getContentPane().add(clipboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 590, 400, 40));
 
-    jButton9.setBackground(Color.decode("#4ecca3"));
+    jButton9.setBackground(Color.decode("#373a40"));
     jButton9.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-    jButton9.setForeground(new java.awt.Color(0, 0, 0));
+    jButton9.setForeground(new java.awt.Color(255, 255, 255));
     jButton9.setText("Importar");
     jButton9.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton9ActionPerformed(evt);
       }
     });
-    getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 410, 110, 40));
+    getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 410, 160, 40));
 
     log.setBackground(Color.decode("#433d3c"));
     log.setForeground(new java.awt.Color(255, 255, 255));
     jScrollPane2.setViewportView(log);
 
-    getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 210, 480));
+    getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 210, 540));
+
+    LabelPath1.setBackground(new java.awt.Color(255, 255, 255));
+    LabelPath1.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+    LabelPath1.setForeground(new java.awt.Color(255, 255, 255));
+    LabelPath1.setText("Portapapeles:");
+    getContentPane().add(LabelPath1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 590, 110, 40));
+
+    LabelPath2.setBackground(new java.awt.Color(255, 255, 255));
+    LabelPath2.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+    LabelPath2.setForeground(new java.awt.Color(255, 255, 255));
+    getContentPane().add(LabelPath2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 30, 40, 40));
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
@@ -819,7 +899,7 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_BModificarActionPerformed
 
   public String getSectores() throws IOException {
-    String sect = "";
+    String sect = "\nDisco Virtual:\n";
 
     for (int k = 0; k < coso.sectores.length; k++) {
       sect += "[" + k + "] ";
@@ -837,10 +917,14 @@ public class Gui extends javax.swing.JFrame {
           } else {
             sect += (char) contenidoSector[i];
           }
+        } else {
+          sect += " ";
         }
       }
 
-      sect += "\n";
+      String strSect = "" + ((coso.punteroSectores[k] == -1) ? "null" : coso.punteroSectores[k]);
+      String strSect2 = "" + ((coso.sectores[k]) ? "ocupado" : "disponible");
+      sect += "(" + strSect + ", " + strSect2 + ")" + "\n";
 
     }
 
@@ -1073,6 +1157,8 @@ public class Gui extends javax.swing.JFrame {
   private javax.swing.JButton BMover;
   private javax.swing.JButton ButtonAnalize1;
   private javax.swing.JLabel LabelPath;
+  private javax.swing.JLabel LabelPath1;
+  private javax.swing.JLabel LabelPath2;
   private javax.swing.JLabel LabelPathW;
   private javax.swing.JLabel clipboard;
   private javax.swing.JButton jButton1;

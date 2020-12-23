@@ -22,7 +22,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  */
 public class TreeCellRenderer extends DefaultTreeCellRenderer {
 
-  Font font = new Font("dialog", Font.PLAIN, 12);
+  Font font = new Font("dialog", Font.PLAIN, 14);
 
   @Override
   public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
@@ -33,13 +33,23 @@ public class TreeCellRenderer extends DefaultTreeCellRenderer {
 
     char tipo = ((String) valueReal).charAt(0);
     valueReal = "" + ((String) valueReal).substring(1, ((String) valueReal).length());
+    
+    boolean soy = false;
+    if (valueReal.contains("$")) {
+      soy = true;
+      valueReal = valueReal.substring(0, valueReal.length()-1);
+      
+    }
 
     JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, valueReal, sel, expanded, leaf, row, hasFocus);
     String strImg = (tipo == 'D') ? "src/Imagenes/folder.png" : "src/Imagenes/file.png";
-    ImageIcon img = new ImageIcon(new ImageIcon(strImg).getImage().getScaledInstance(18, 18, Image.SCALE_DEFAULT));
+    ImageIcon img = new ImageIcon(new ImageIcon(strImg).getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT));
     label.setIcon(img); //imageMap.get((String) value)
     label.setHorizontalTextPosition(JLabel.RIGHT);
     label.setFont(font);
+    if (soy) {
+      label.setFont(new Font("dialog", Font.BOLD, 16));
+    }
 
     label.setBackground(Color.decode("#433d3c"));
     return label;

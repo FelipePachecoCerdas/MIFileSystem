@@ -19,7 +19,7 @@ import javax.swing.JList;
  */
 public class ListCellRenderer extends DefaultListCellRenderer {
 
-  Font font = new Font("dialog", Font.PLAIN, 16);
+  Font font = new Font("dialog", Font.PLAIN, 14);
 
   public Component getListCellRendererComponent(
     JList list, Object value, int index,
