@@ -15,13 +15,16 @@ public class Archivo extends Registro {
 
   public int Tamano;
   public String Contenido;
+  public String extension;
   public int sectorInicial;
 
-  public Archivo(String pNombre, Folder pPadre, int pTamano, String pContenido) {
-    this.path = pPadre.path + pNombre + "/";
+  public Archivo(String pNombre, Folder pPadre, int pTamano, String pContenido, String pExtension) {
+    this.path = pPadre.path + pNombre + "." + pExtension; // "/";
     this.nombre = pNombre;
+    this.extension = pExtension;
     this.Tamano = pTamano;
     this.FechaCreacion = new Date();
+    this.FechaModificacion = new Date();
     this.Contenido = pContenido;
     this.padre = pPadre;
     this.sectorInicial = -1;

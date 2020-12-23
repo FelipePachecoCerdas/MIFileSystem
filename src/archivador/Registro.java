@@ -18,6 +18,7 @@ public class Registro implements Cloneable {
   public String path;
   public Folder padre;
   public Date FechaCreacion;
+  public Date FechaModificacion;
 
   public void cambiarPath() {
     String nuevoPath = "";
@@ -45,7 +46,7 @@ public class Registro implements Cloneable {
   public int getSize() {
     return 0;
   }
-  
+
   public int getSectores(FileSystem fs) {
     return 0;
   }

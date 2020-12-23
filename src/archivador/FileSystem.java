@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 public class FileSystem {
 
   public Folder Actual;
+  public Folder root;
   public RandomAccessFile discoVirtual;
   public boolean[] sectores;
   public int[] punteroSectores;
@@ -43,12 +44,13 @@ public class FileSystem {
     Arrays.fill(this.punteroSectores, -1);
     this.tamanoSector = pTamanoSector;
     Folder c = new Folder("C:", null);//Crea el folder inicial
+    this.root = c;
     this.Actual = c;
   }
 
   //Vendria siendo la función FILE
-  public void createFile(String pNombre, int pTamano, String pContenido) throws IOException {
-    Archivo arc = new Archivo(pNombre, Actual, pTamano, pContenido);
+  public boolean createFile(String pNombre, int pTamano, String pContenido, String pExtension) throws IOException {
+    Archivo arc = new Archivo(pNombre, Actual, pTamano, pContenido, pExtension);
     String[] partesContenido = pContenido.split(String.format("(?<=\\G.{%1$d})", this.tamanoSector));
     if (partesContenido.length <= this.verificarSectores()) {
       this.escribirDisco(arc, partesContenido);
@@ -56,8 +58,10 @@ public class FileSystem {
       System.out.println(Arrays.toString(this.punteroSectores));
       System.out.println(Arrays.toString(this.sectores));
       Actual.listaCosos.add(arc);
+      return true;
     } else {
       System.out.println("No hay suficiente espacio");
+      return false;
     }
   }
 
@@ -68,29 +72,36 @@ public class FileSystem {
     return fol;
   }
 
-  public void modFILE(Archivo arc, String contenido) throws IOException {
+  public boolean modFILE(Archivo arc, String contenido) throws IOException {
     arc.Contenido = contenido;
+    arc.Tamano = contenido.length();
     String[] partesContenido = contenido.split(String.format("(?<=\\G.{%1$d})", this.tamanoSector));
     if (partesContenido.length - this.misSectores(arc.sectorInicial) <= this.verificarSectores()) {
       this.modificarDisco(arc, partesContenido);
-      System.out.println(arc.sectorInicial);
+      /*      System.out.println(arc.sectorInicial);
       System.out.println(Arrays.toString(this.punteroSectores));
-      System.out.println(Arrays.toString(this.sectores));
+      System.out.println(Arrays.toString(this.sectores));*/
+      return true;
     } else {
       System.out.println("No hay suficiente espacio");
+      return false;
     }
   }
 
   public void ReMove(Registro pBorrar) {
     if (pBorrar instanceof Archivo) {
-      System.out.println(((Archivo) pBorrar).sectorInicial);
-      this.liberarSectores(((Archivo) pBorrar).sectorInicial);
-      System.out.println("Archivo");
-      System.out.println(Arrays.toString(this.punteroSectores));
-      System.out.println(Arrays.toString(this.sectores));
-    }
-    Actual.listaCosos.remove(pBorrar);
+      Archivo a = (Archivo) pBorrar;
+      this.liberarSectores(a.sectorInicial);
+      a.padre.listaCosos.remove(pBorrar);
 
+    } else {
+      Folder f = (Folder) pBorrar;
+      for (int i = 0; i < f.listaCosos.size(); i++) {
+        ReMove(f.listaCosos.get(i));
+      }
+
+      f.padre.listaCosos.remove(pBorrar);
+    }
   }
 
   public void goUp() {
@@ -112,7 +123,14 @@ public class FileSystem {
       this.discoVirtual.seek(sector * this.tamanoSector);
       this.discoVirtual.read(contenidoSector, 0, this.tamanoSector);
       //System.out.println(this.tamanoSector*sector);
-      contenido += new String(contenidoSector);
+
+      //contenido += new String(contenidoSector);
+      for (int i = 0; i < contenidoSector.length; i++) {
+        if (contenidoSector[i] != 0) {
+          contenido += (char) contenidoSector[i];
+        }
+      }
+
       sector = this.punteroSectores[sector];
     }
     return contenido;
@@ -171,14 +189,31 @@ public class FileSystem {
 
   }
 
-  public void importar(File f) throws FileNotFoundException, IOException {
+  public boolean contiene(Folder a, Registro r) {
+    if (a == r) {
+      return true;
+    }
+    for (int i = 0; i < a.listaCosos.size(); i++) {
+      System.out.println("MMMM");
+      Registro elem = a.listaCosos.get(i);
+      if (elem == r) {
+        return true;
+      } else if (elem instanceof Folder && contiene((Folder) elem, r)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public void importar(File f, String s) throws FileNotFoundException, IOException {
     if (f.isDirectory()) {
       Folder respaldo = this.Actual;
-      this.Actual = createDir(f.getName());
+      String name = (s.equals("") ? f.getName() : s);
+      this.Actual = createDir(name);
 
       for (int i = 0; i < f.list().length; i++) {
         //System.out.println(f.getAbsolutePath() + "/" + f.list()[i]);
-        importar(new File(f.getAbsolutePath() + "/" + f.list()[i]));
+        importar(new File(f.getAbsolutePath() + "/" + f.list()[i]), "");
       }
 
       this.Actual = respaldo;
@@ -190,7 +225,12 @@ public class FileSystem {
         contenido += sc.nextLine();
       }
 
-      createFile(f.getName(), contenido.length(), contenido);
+      String n = f.getName();
+      String nf = n.substring(0, n.lastIndexOf('.'));
+      String ef = n.substring(n.lastIndexOf('.') + 1, n.length());
+
+      String name = (s.equals("") ? nf : s);
+      createFile(name, contenido.length(), contenido, ef);
     }
 
   }
@@ -198,7 +238,8 @@ public class FileSystem {
   public boolean exportar(File f, Registro r) throws FileNotFoundException, IOException {
     if (r instanceof Folder) {
       Folder d = (Folder) r;
-      File file = new File(f.getAbsolutePath() + "/" + r.nombre);
+      String nombreXD = (d.nombre.equals("C:")) ? "C" : d.nombre;
+      File file = new File(f.getAbsolutePath() + "/" + nombreXD);
 
       boolean ok = file.mkdir();
       if (!ok) {
@@ -210,7 +251,7 @@ public class FileSystem {
       }
 
     } else {
-      File file = new File(f.getAbsolutePath() + "/" + r.nombre /* + ETX */);
+      File file = new File(f.getAbsolutePath() + "/" + r.nombre + "." + ((Archivo) r).extension);
       boolean ok = file.createNewFile();
       if (!ok) {
         return ok;
@@ -317,9 +358,54 @@ public class FileSystem {
   }
 
   public ArrayList<Registro> buscar(String buscar) {
+    String ext = null, nombre = null;
+    if (buscar.length() >= 2 && buscar.substring(0, 2).equals("*.")) {
+      ext = buscar.substring(buscar.indexOf(".") + 1, buscar.length());
+    } else {
+      nombre = buscar;
+    }
+
     ArrayList<Registro> encontrados = new ArrayList<Registro>();
-    Actual.match(buscar, encontrados);
+
+    if (ext != null) {
+      buscarPorExtension(encontrados, root, ext);
+    } else {
+      buscarPorNombre(encontrados, root, nombre);
+    }
+
+    //Actual.match(buscar, encontrados);
     return encontrados;
   }
 
+  public void buscarPorExtension(ArrayList<Registro> e, Registro r, String ext) {
+    if (r instanceof Folder) {
+      Folder f = (Folder) r;
+      for (int i = 0; i < f.listaCosos.size(); i++) {
+        Registro elem = f.listaCosos.get(i);
+        buscarPorExtension(e, elem, ext);
+      }
+
+    } else {
+      Archivo a = (Archivo) r;
+      if (a.extension.equals(ext)) {
+        e.add(r);
+      }
+    }
+  }
+
+  public void buscarPorNombre(ArrayList<Registro> e, Registro r, String nombre) {
+    String name = (r instanceof Folder) ? r.nombre : (((Archivo) r).nombre + "." + ((Archivo) r).extension);
+    if (name.contains(nombre)) {
+      e.add(r);
+    }
+
+    if (r instanceof Folder) {
+      Folder f = (Folder) r;
+      for (int i = 0; i < f.listaCosos.size(); i++) {
+        Registro elem = f.listaCosos.get(i);
+        buscarPorNombre(e, elem, nombre);
+      }
+
+    }
+  }
 }
