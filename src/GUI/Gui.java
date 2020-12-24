@@ -66,12 +66,16 @@ public class Gui extends javax.swing.JFrame {
     initComponents();
     this.clipboard.setText("");
     actualizarCosos();
+    this.setTitle("MI File System");
+
+    ImageIcon img = new ImageIcon(new ImageIcon("src/Imagenes/medal.png").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+    this.setIconImage(img.getImage());
     jButton5.setEnabled(false);
     BCopyVV.setEnabled(false);
     BMover.setEnabled(false);
 
     final int TAM = 25;
-    ImageIcon img = new ImageIcon(new ImageIcon("src/Imagenes/copiar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    img = new ImageIcon(new ImageIcon("src/Imagenes/copiar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
     this.BCopyVV.setIcon(img);
 
     img = new ImageIcon(new ImageIcon("src/Imagenes/nuevoDirectorio.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
@@ -92,7 +96,7 @@ public class Gui extends javax.swing.JFrame {
     img = new ImageIcon(new ImageIcon("src/Imagenes/propiedades.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
     this.BModificar.setIcon(img);
 
-    img = new ImageIcon(new ImageIcon("src/Imagenes/borrar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    img = new ImageIcon(new ImageIcon("src/Imagenes/limpiar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
     this.jButton5.setIcon(img);
 
     img = new ImageIcon(new ImageIcon("src/Imagenes/buscar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
@@ -101,7 +105,7 @@ public class Gui extends javax.swing.JFrame {
     img = new ImageIcon(new ImageIcon("src/Imagenes/deseleecionar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
     this.jButton2.setIcon(img);
 
-    img = new ImageIcon(new ImageIcon("src/Imagenes/limpiar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
+    img = new ImageIcon(new ImageIcon("src/Imagenes/borrar.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
     this.limpiar.setIcon(img);
 
     img = new ImageIcon(new ImageIcon("src/Imagenes/atras.png").getImage().getScaledInstance(TAM, TAM, Image.SCALE_DEFAULT));
@@ -707,14 +711,34 @@ public class Gui extends javax.swing.JFrame {
           // RENAME
           String cosa = (seleccionado instanceof Folder) ? "Directorio" : "Archivo";
           String nuevoNombre = JOptionPane.showInputDialog(this, "Indique el nuevo nombre del " + cosa, "Nombre del " + cosa, JOptionPane.QUESTION_MESSAGE);
-          if (nuevoNombre == null || nuevoNombre.equals("") || nuevoNombre.equals(seleccionado.nombre)) {
+          if (nuevoNombre == null) {
+            /*
             moviendo = false;
             this.BMover.setText("Mover");
             this.BMover.setEnabled(false);
             this.clipboard.setText("");
-            actualizarCosos();
+            actualizarCosos();*/
             return;
           }
+
+          Registro encontradoXD = null;
+          for (Registro r : seleccionado.padre.listaCosos) {
+            if (r.nombre.equals(nuevoNombre)) {
+              if (r instanceof Archivo && seleccionado instanceof Archivo) {
+                if (((Archivo) r).extension.equals(((Archivo) seleccionado).extension)) {
+                  encontradoXD = r;
+                }
+              } else if (r instanceof Folder && seleccionado instanceof Folder) {
+                encontradoXD = r;
+              }
+            }
+          }
+
+          if (nuevoNombre.equals("") || nuevoNombre.equals(seleccionado.nombre) || encontradoXD != null) {
+            JOptionPane.showMessageDialog(null, "Este nombre ya está siendo usado, vuelva a intentarlo", "Operación Imposible", JOptionPane.INFORMATION_MESSAGE);
+            return;
+          }
+
           seleccionado.nombre = nuevoNombre;
 
           seleccionado.cambiarPath();
@@ -805,7 +829,25 @@ public class Gui extends javax.swing.JFrame {
             }
 
             String nuevoNombre = JOptionPane.showInputDialog(this, "Indique el nombre del " + cosa, "Nombre del " + cosa, JOptionPane.QUESTION_MESSAGE);
-            if (nuevoNombre == null || nuevoNombre.equals("") || nuevoNombre.equals(seleccionado.nombre)) {
+            if (nuevoNombre == null) {
+              return;
+            }
+
+            Registro encontradoXD = null;
+            for (Registro r : seleccionado.padre.listaCosos) {
+              if (r.nombre.equals(nuevoNombre)) {
+                if (r instanceof Archivo && seleccionado instanceof Archivo) {
+                  if (((Archivo) r).extension.equals(((Archivo) seleccionado).extension)) {
+                    encontradoXD = r;
+                  }
+                } else if (r instanceof Folder && seleccionado instanceof Folder) {
+                  encontradoXD = r;
+                }
+              }
+            }
+
+            if (nuevoNombre.equals("") || nuevoNombre.equals(seleccionado.nombre) || encontradoXD != null) {
+              JOptionPane.showMessageDialog(null, "Este nombre ya está siendo usado, vuelva a intentarlo", "Operación Imposible", JOptionPane.INFORMATION_MESSAGE);
               return;
             }
 
@@ -1054,8 +1096,27 @@ public class Gui extends javax.swing.JFrame {
 
           if (response == 0) {
 
-            String nuevoNombre = JOptionPane.showInputDialog(this, "Indique el nombre del " + cosa, "Nombre del " + cosa, JOptionPane.QUESTION_MESSAGE);
-            if (nuevoNombre == null || nuevoNombre.equals("") || nuevoNombre.equals(nf)) {
+            String nuevoNombre = JOptionPane.showInputDialog(this, "Indique el nuevo nombre del " + cosa, "Nombre del " + cosa, JOptionPane.QUESTION_MESSAGE);
+            if (nuevoNombre == null) {
+              return;
+            }
+
+            Registro encontradoXD = null;
+            for (Registro r : coso.Actual.listaCosos) {
+              if (r.nombre.equals(nuevoNombre)) {
+                if (r instanceof Archivo && f.isFile()) {
+                  String ef = f.getName().substring(f.getName().lastIndexOf('.') + 1, f.getName().length());
+                  if (((Archivo) r).extension.equals(ef)) {
+                    encontradoXD = r;
+                  }
+                } else if (r instanceof Folder && f.isDirectory()) {
+                  encontradoXD = r;
+                }
+              }
+            }
+
+            if (nuevoNombre.equals("") || nuevoNombre.equals(nf) || encontradoXD != null) {
+              JOptionPane.showMessageDialog(null, "Este nombre ya está siendo usado, vuelva a intentarlo", "Operación Imposible", JOptionPane.INFORMATION_MESSAGE);
               return;
             }
 
@@ -1094,7 +1155,6 @@ public class Gui extends javax.swing.JFrame {
         } else {
           //
           JOptionPane.showMessageDialog(null, "No se ha podido exportar el archivo o directorio porque ya existe uno con ese nombre en la máquina", "Operación Imposible", JOptionPane.INFORMATION_MESSAGE);
-
         }
 
       } catch (IOException ex) {

@@ -6,6 +6,7 @@
 package archivador;
 
 import GUI.Gui;
+import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;   // Import the FileWriter class
 import java.io.FileNotFoundException;
@@ -19,6 +20,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  *
@@ -38,6 +40,13 @@ public class FileSystem {
 
     int pCantSectores = -1;
     int pTamanoSector = -1;
+
+    UIManager.put("OptionPane.background", Color.decode("#121212"));
+    UIManager.getLookAndFeelDefaults().put("Panel.background", Color.decode("#121212"));
+    UIManager.put("OptionPane.messageForeground", Color.decode("#FFFFFF"));
+    UIManager.put("Button.background", Color.decode("#373a40"));
+    UIManager.put("Button.foreground", Color.decode("#FFFFFF"));
+    UIManager.put("Label.foreground", Color.decode("#FFFFFF"));
 
     while (pCantSectores == -1) {
       String cant = JOptionPane.showInputDialog(null, "Indique la cantidad de sectores del disco virtual", "Parámetros Iniciales", JOptionPane.QUESTION_MESSAGE);
@@ -126,7 +135,7 @@ public class FileSystem {
       System.out.println("No hay suficiente espacio");
       return false;
     }
-  }
+  }             
 
   public void ReMove(Registro pBorrar) {
     if (pBorrar instanceof Archivo) {
